@@ -1,0 +1,3 @@
+import "server-only";
+export function isConfigured() { return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.INVITATION_ID && process.env.INVITATION_SESSION_SECRET && process.env.INVITATION_SESSION_SECRET.length >= 32 && process.env.APP_URL); }
+export function env(name: string) { const value = process.env[name]; if (!value) throw new Error(`Missing server setting: ${name}`); if(name === "INVITATION_SESSION_SECRET" && value.length < 32) throw new Error("Invitation signing secret must contain at least 32 characters."); return value; }

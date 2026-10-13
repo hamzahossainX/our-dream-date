@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.env
+.env.*
+!.env.example
+.local-access.txt
+*.mp4
+.claude/
+supabase/.temp/
+supabase/.branches/
+docs/system-design-qa/
+test-results/
+playwright-report/
+*.tsbuildinfo

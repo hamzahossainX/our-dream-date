@@ -1,0 +1,331 @@
+FAHIM — A ROMANTIC INVITATION FOR HIS WIFE
+Project plan | 2026-10-13 | Asia/Dhaka
+
+STATUS AND START RULE
+This is a NEW project, confirmed by the owner.
+This plan passed implementation review after the owner authorized review and
+building on 2026-10-13. Development is now authorized. Local setup and tests are
+in progress; hosted deployment requires concrete account access and a reviewed
+release. Earlier planning-only instructions are superseded.
+The owner's requested stack is Next.js + Supabase + Vercel. English is confirmed.
+Genesis is active; this requested planning step records the supplied idea and
+technical direction without claiming later Genesis approval gates have passed.
+
+1. PURPOSE
+Fahim wants to give his wife a personal website that feels like opening a gift.
+The main experience is a romantic invitation to spend time together: answer,
+choose a date and time, pick activities, leave an optional note, and confirm.
+Fahim can privately view her answer and customize the invitation in an admin
+dashboard. Design quality and a smooth phone experience are central deliverables.
+
+Launch success: his wife can open the shared invitation on her phone, complete
+the appropriate response path, see a real saved confirmation, and Fahim can
+retrieve that response securely. No arbitrary traffic or revenue targets.
+
+2. REFERENCE
+Use the local file:
+  WhatsApp Video 2026-10-13 at 3.14.13 PM.mp4
+The approximately 24-second vertical recording was visually reviewed through
+sampled frames. It shows a soft pink page, a centered light invitation card,
+playful Yes/No controls, date/time choices, and a celebratory follow-up card.
+Use its mood and sequence as inspiration, with an original, polished design.
+The sampled frames do not establish every hover or button interaction.
+The Facebook link is not needed for further reference work.
+The video also shows a payment-style joke; payments and charges are outside
+this project's requested scope and will not be included.
+
+3. VISUAL DIRECTION
+Concept: a personal love letter unfolding into a date invitation.
+- Warm blush backdrop, ivory cards, rose accents, restrained gold details.
+- Elegant readable headings paired with a clean body font; confirm font support
+  if Bengali text is chosen. Warm typography rather than a generic app template.
+- Carefully balanced spacing, soft depth, rounded details, subtle paper texture,
+  and delicate hearts or petals that do not obstruct the form.
+- Personalized opening addressed to his wife and signed by Fahim.
+- A simple envelope/reveal moment followed by a focused invitation card.
+- Gentle step transitions, expressive button reactions, selected-card feedback,
+  and a short celebration after a successful save.
+- Optional couple photo if provided; no invented personal photos or names.
+- Phone-first layout with larger-screen refinement and generous touch targets.
+- Sound is optional and off by default; any future playback needs an explicit
+  user gesture and a provided/licensed audio file.
+
+Interaction rules:
+- Yes gets a joyful response. No gets a playful, affectionate response while
+  remaining reachable by touch, keyboard, and mouse.
+- A decorative reaction may tease, but No must not become impossible to choose.
+- Respect reduced-motion preferences and avoid rapid flashes.
+- Clearly visible focus, accessible labels, readable contrast, inline error
+  messages, and errors announced to assistive technology.
+- Keep decorations light enough for ordinary phones and slower connections.
+
+4. INVITATION JOURNEY
+A. Welcome / reveal
+   Show the personalized invitation and Yes/No actions.
+   No database write occurs when a button is merely selected.
+
+B. Answer
+   Yes proceeds to scheduling and activities.
+   No offers a gentle response, optional message, and an explicit final decline
+   confirmation. The recipient may return and choose Yes before submitting.
+   A declined invitation is a complete response and does not require a date,
+   time, or activity selection. Those fields remain empty for that branch.
+
+C. Date and time (Yes branch)
+   Accessible date picker and configurable available time slots.
+   Reject past dates and invalid/unavailable slots on both client and server.
+   Display the invitation timezone clearly; default proposal is Asia/Dhaka.
+   Define date/time comparisons in that timezone, not the browser's assumption.
+
+D. Activities / preferences (Yes branch)
+   Attractive selectable cards with labels and optional small illustrations.
+   Suggested placeholder choices: dinner, cafe, movie, walk, or a surprise.
+   Fahim can replace these before launch.
+   Support single-select and multi-select questions with configurable required
+   status, minimum/maximum selections, option order, and enabled/disabled state.
+   Keep required prompts few so the invitation remains enjoyable.
+
+E. Optional message
+   A short plain-text note with a configurable bounded length; proposed maximum
+   is 1,000 characters. Blank is valid. No HTML or rich-text input in v1.
+
+F. Review and submit
+   Show the answer, date/time where relevant, preferences, and message.
+   Permit edits before sending. Use one explicit final submission button.
+   Disable repeated clicks while saving, with a clear loading state.
+   On failure, keep the in-memory selections and allow a safe retry.
+
+G. Final confirmation
+   Show success only after the database commits the complete response.
+   Display a romantic closing, the saved summary, and a unique response ID.
+   A private receipt/session may reload that confirmation without allowing
+   arbitrary visitors to look up other responses by guessing IDs.
+
+5. COMPLETENESS AND DUPLICATE RULES
+- Form drafts live only in page memory. No partial responses, visit records,
+  rejected attempts, or abandoned form data are inserted into response tables.
+- Refreshing before submission resets the draft; there is no draft sync in v1.
+- Validate the whole payload against the active invitation configuration.
+- Yes requires a valid future date/time and every required applicable question.
+- No requires only the final decline confirmation and any applicable required
+  decline question; the optional note can be blank.
+- Proposed personal-gift policy: one completed response per recipient invitation
+  link. Additional test links are separate from the real recipient link.
+- Use a server-issued idempotency key and a database uniqueness constraint on
+  recipient invitation + completion. A transaction saves the response and
+  selections together and marks that recipient invitation as completed.
+- Concurrent clicks and retries must return the existing successful receipt
+  for that authorized link, not create another response.
+- A reused idempotency key with a different payload returns a clear conflict.
+- Clearing cookies or switching devices must not bypass the invitation-level
+  constraint. An IP address is not the identity or duplicate rule.
+- After submission, edits require an explicit admin reset/reopen operation.
+  Deleting a response must not silently reopen its invitation.
+
+6. ADMIN DASHBOARD
+Private routes under /admin; no recipient account or login is required.
+Supabase Auth with an explicitly provisioned admin account; no public admin
+signup. A valid login alone is insufficient: the account must also be assigned
+the admin role/owner permission.
+
+Dashboard capabilities:
+- Secure login, logout, password recovery, and server-verified sessions.
+- Paginated response list, newest first, with ID, answer, chosen date/time,
+  selected preferences, message preview, and submission timestamp.
+- Detailed response view with the complete submitted snapshot.
+- Search by response ID and message; filter by answer, submission date range,
+  selected invitation date, and selected activities. Clearly label each date.
+- Delete an individual response after a confirmation identifying the record.
+  Verify ownership on the server and refresh lists/statistics after deletion.
+- Summary statistics: completed responses, accepted/declined counts and rates,
+  submissions by day, selected activities, and date/time preference totals.
+  Avoid fake statistics, visit counts, or abandonment metrics: drafts are not
+  collected. Counts reflect currently stored complete responses.
+- Export the current filtered response set or all authorized responses as CSV
+  and a real .xlsx Excel workbook; include timezone and selection labels.
+- Escape CSV correctly and neutralize spreadsheet formula injection in both
+  export formats. Treat text beginning with formula characters as literal text.
+- Manage question wording, single/multiple selection, required status, options,
+  order, date availability, and time slots.
+- Manage basic presentation: recipient/sender display names, opening text,
+  closing message, approved color theme, and optional image.
+- Preview and publish configuration changes. Do not expose raw HTML, arbitrary
+  JavaScript, SQL, or unrestricted CSS customization.
+- Preserve historic response labels when questions/options later change.
+
+For a single personal gift the dashboard is expected to start with one real
+recipient response. Multiple submission examples used in QA must be labeled
+as test fixtures and never represented as real activity.
+
+7. PROPOSED APPLICATION SHAPE
+- Next.js App Router with TypeScript for the invitation and admin interface.
+- Reusable UI components and a single explicit state model for the form steps.
+- One server validation schema shared where appropriate with client validation.
+- Next.js Route Handlers or Server Actions for final submission and admin writes.
+  Choose the exact split at implementation; enforce the same authorization,
+  origin checks, validation, and rate limiting at every write boundary.
+- Supabase Postgres for configuration, recipient links, and complete responses;
+  Supabase Auth for admins. Storage is needed only if image upload is included.
+- Vercel for application hosting, preview environments, and production HTTPS.
+- Pin compatible stable package versions at development start and commit the
+  lockfile. The plan does not promise unverified future version numbers.
+
+Proposed routes:
+  /                   Generic gift landing or invalid-link guidance
+  /invite/[token]     Recipient's invitation; exchange token for a private session
+  /confirmation      Saved receipt, accessible only to the relevant session
+  /admin/login       Admin sign-in
+  /admin             Overview and statistics
+  /admin/responses   Search, filters, detail, deletion, export
+  /admin/invitation  Questions, options, schedule, appearance, preview/publish
+
+8. DATABASE MODEL (PROPOSED, NO MIGRATIONS APPLIED)
+- admin_memberships: Supabase auth user ID, permitted owner/invitation scope.
+  No self-service inserts or role upgrades for ordinary authenticated users.
+- invitations: owner, display text, timezone, appearance, active configuration.
+- invitation_versions: published configuration snapshots/version identifiers.
+- questions: invitation, version, label, type, required, selection limits, order.
+- options: question, label, enabled state, order.
+- available_slots: permitted dates/ranges and time-slot configuration.
+- recipient_invites: invitation, hashed high-entropy token, expiry/revocation,
+  completed response marker. Store no recipient email unless later required.
+- responses: server-generated UUID, recipient invitation, answer, chosen local
+  date/time and timezone (nullable on No), message, server-generated UTC
+  submitted_at, configuration version, idempotency key, and content hash.
+- response_selections: response, question/option identifiers and saved label
+  snapshots. Historic summaries remain readable after configuration edits.
+- rate-limit state: bounded, expiring counters without response content;
+  technical protection state is not an incomplete invitation response.
+
+Use foreign keys, check constraints, relevant indexes, and database-enforced
+unique constraints. Save a response plus all selections atomically. Resolve
+configuration changes during an open form by requesting a review of the latest
+configuration rather than silently saving invalid or mislabelled choices.
+
+9. PRIVACY, AUTHORIZATION, AND SECURITY
+- Proposed default: an unlisted high-entropy recipient link, search-engine
+  noindex, no third-party visitor analytics, and no public response directory.
+  An unlisted bearer link is not proof of identity; anyone it is shared with can
+  use it. Offer an access code if the owner needs stronger protection.
+- Hash invitation tokens at rest; do not include tokens in response exports,
+  application logs, or third-party requests. Exchange for a secure scoped session
+  and remove the token from the address bar where feasible.
+- Use a restrictive referrer policy to avoid leaking invitation URLs.
+- Enable RLS and set least-privilege grants on every exposed table.
+- Anonymous clients cannot read, change, or delete responses or admin records,
+  and cannot insert directly into response tables.
+- Recipient writes go through a server-only, narrowly scoped transactional
+  operation after validating the invitation session, configuration, rate limit,
+  and submission payload. If elevated Supabase credentials are needed for that
+  operation, document that they bypass RLS and enforce permissions explicitly;
+  never describe that server path as protected by recipient RLS alone.
+- Admin reads/writes use verified Supabase user sessions and owner-aware RLS.
+  Protect all admin endpoints and exports, not just the dashboard UI.
+- Keep secret keys server-only; public configuration contains only intended
+  presentation/question data, never tokens, memberships, or responses.
+- Follow the supported Supabase SSR cookie/session pattern and verify tokens
+  server-side. Session cookies and caching must prevent cross-user data exposure.
+- Protect state-changing requests against CSRF through origin/host validation
+  and appropriate session/CSRF protections; never mutate data with GET requests.
+- Render messages and custom copy as plain text using framework escaping.
+  Validate lengths, IDs, dates, option membership, selection counts, and uploads.
+  Use Content Security Policy and suitable security headers.
+- Use persistent/atomic rate limiting for submit and sensitive auth endpoints;
+  a process-local Map alone is not reliable across Vercel instances. Proposed
+  store is a protected Supabase operation/table with expiring counters.
+- Bound request sizes; validate image content/type/size if uploads are enabled.
+- Do not log private messages, credentials, bearer links, or full request bodies.
+- Vercel HTTPS, HTTPS-only production cookies, and deliberate Auth redirect URLs.
+- Confirm deletion behavior and provide a documented way to revoke the link and
+  remove responses after the gift; do not silently retain extra personal data.
+
+10. DEVELOPMENT ORDER — ONLY AFTER THE OWNER SAYS START
+1) Confirm essential personalization and review the proposed scope/blueprint.
+   Create project docs and bind Genesis/A-Team to the chosen stack at the proper
+   phase. Default copy can be used temporarily, clearly marked for replacement.
+2) Create the Next.js skeleton, design tokens, responsive invitation flow, and
+   animations. Demonstration states are labeled; no fake successful persistence.
+3) Add schema migrations, admin permissions, RLS policies, seed configuration,
+   private invitation sessions, and atomic validated final submission.
+4) Connect the recipient UI to real saving, retries, duplicate handling, and
+   authorized confirmation. Exercise both Yes and No paths.
+5) Build the authenticated dashboard, real metrics, configuration editor,
+   filtered CSV/Excel export, and confirmed deletion.
+6) Run functional/security checks and inspect actual screenshots on phone and
+   desktop. Improve the design until the invitation feels like a finished gift.
+7) Prepare setup/testing/admin documentation, .env.example with variable names
+   only, repository handover, and a deployment-ready build.
+8) Configure the owner's Supabase/Vercel projects and admin account when access
+   is available. Review the concrete preview before a production release.
+   Hosting credentials, personal content, and deployment approval must not be
+   fabricated. No account creation, purchase, or production deployment now.
+
+11. ACCEPTANCE CHECKS
+- Welcome, every form step, review, validation, and final confirmation work on
+  phone and desktop; keyboard users can complete both Yes and No paths.
+- Required fields block invalid completion; valid No does not demand a date.
+- Abandoning any step leaves no response or selection rows in the database.
+- A successful response includes its unique ID and server timestamp and is
+  visible to the authorized admin with the same choices shown to the recipient.
+- Double-clicks, concurrent submissions, refreshes, network retries, and another
+  device using the same link do not create duplicate complete responses.
+- Expired/revoked links, invalid dates/options, excessive payloads, and stale
+  configuration produce understandable errors without partial database writes.
+- Anonymous and non-admin users cannot read/export/delete responses, change
+  settings, or grant themselves admin access; direct database access is tested.
+- Admin filters, pagination, details, metrics, deletion, and both export formats
+  match the actual authorized data, including empty and single-response states.
+- Renamed/deleted options do not rewrite past response meaning.
+- Exported malicious formula-like text stays inert when opened in a spreadsheet.
+- Session expiry/logout, cross-origin writes, rate limiting, and secret exposure
+  checks pass. Auth recovery redirects target permitted application URLs.
+- Reduced motion, focus, contrast, slow loading, error states, empty states,
+  and a long message are visually checked. No unconfigured feature claims success.
+- Type checking, linting, production build, meaningful behavior tests, RLS tests,
+  and end-to-end invitation/admin checks pass before handover.
+
+12. DELIVERABLES
+- A beautiful responsive invitation website with real database-backed responses.
+- A fully working secure admin dashboard and both CSV and Excel export.
+- Source code and repository handover with a committed dependency lockfile.
+- Supabase schema migrations, RLS policies, and repeatable configuration seeds.
+- A live Vercel deployment after the later build/release steps are authorized.
+- Setup, environment variable, testing, admin, deployment, and troubleshooting
+  documentation; instructions to revoke invitations and remove stored responses.
+
+13. DETAILS TO SETTLE WHEN DEVELOPMENT STARTS
+Personalization: wife's preferred display name, Fahim's sign-off, language,
+occasion, invitation wording, and any permitted couple photo/audio.
+Date rules: available dates/time slots, timezone, and activities she can choose.
+Response policy: confirm one final response per personal link and whether an
+admin may reopen it; decide whether an additional access code is wanted.
+Handover: admin email, repository owner/name, Supabase project, Vercel project,
+and optional domain. No credentials should be written into plan.txt or git.
+These are future setup inputs, not requests to create them now.
+
+14. OUT OF SCOPE FOR V1
+Payments, fake fees, bookings with external vendors, public registration,
+multi-couple SaaS, subscriptions, chat, social feeds, automated messaging,
+guest accounts, unfinished-response tracking, analytics pixels, arbitrary code
+in customization, native mobile apps, and a general-purpose page/form builder.
+Fahim can edit the supported invitation settings without turning this gift
+website into a larger platform.
+
+15. TECHNICAL REFERENCES
+The product's visual reference is the local video listed in section 2.
+Implementation should follow official documentation, rechecked at build time:
+  https://nextjs.org/docs/app/guides/data-security
+  https://nextjs.org/docs/app/guides/backend-for-frontend
+  https://supabase.com/docs/guides/auth/server-side/creating-a-client
+  https://supabase.com/docs/guides/database/postgres/row-level-security
+  https://vercel.com/docs/projects/deploy-from-cli
+
+NEXT ACTION
+Implement the reviewed plan, verify locally with Supabase where available,
+and prepare handover and a production-ready release for the owner.
+
+IMPLEMENTATION REVIEW 2026-10-13
+Scope accepted. Store configurable questions/options/slots in immutable versioned
+JSON rather than separate tables, with stable IDs and response label snapshots.
+This reduces maintenance while preserving all requested dashboard customization
+and historical response meaning. Custom project roles are recorded in docs/TEAM.md.

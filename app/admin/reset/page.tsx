@@ -1,0 +1,2 @@
+import { AdminWorkspace } from "@/components/admin/AdminWorkspace";
+export default function Reset() { return <AdminWorkspace tab="reset" />; }
