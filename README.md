@@ -103,7 +103,7 @@ Responses keep their submitted wording snapshot, so later question changes do no
 - Check origin/CSRF boundaries, secure session cookies, nonce-based script CSP, persistent rate limits, and spreadsheet formula escaping.
 - Use small, reviewable conventional commits. Run applicable checks before merging or deploying. Source changes and database changes need coordinated release review.
 
-Project-specific agent instructions live in [AGENTS.md](AGENTS.md). The installed Genesis/A-Team workflow is documented in [GENESIS_AUDIT.md](docs/GENESIS_AUDIT.md); Claude-only slash commands and hooks are not automatically installed in Codex.
+Local agent definitions, hooks, memory, skills, and workflow files are excluded from Git. The repository contains the application and its product/setup documentation.
 
 ## Verify changes
 

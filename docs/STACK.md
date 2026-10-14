@@ -16,7 +16,7 @@ Next.js 16.4.0 App Router, React 19.3.0, TypeScript, npm/package-lock.json, one 
 Browser QA uses the supported computer-use browser at375/768/1440 widths. No claim of a hosted deployment. Start with npm run dev at http://127.0.0.1:3000. The app shows an honest design preview if Supabase is not configured.
 
 ## 4 Reuse surface
-app/ contains pages and route handlers; components/invitation/ is the recipient experience; components/admin/ is the dashboard. lib/contracts.ts is the shared contract, defaults.ts the bootstrap copy, validation.ts the validation schema; lib/server/ holds protected service access/session/Auth operations. lib/export.ts creates safe spreadsheet cells. lib/runaway.ts calculates collision-safe mouse evasion. See generated INVENTORY.md before duplicating code.
+app/ contains pages and route handlers; components/invitation/ is the recipient experience; components/admin/ is the dashboard. lib/contracts.ts is the shared contract, defaults.ts the bootstrap copy, validation.ts the validation schema; lib/server/ holds protected service access/session/Auth operations. lib/export.ts creates safe spreadsheet cells. lib/runaway.ts calculates collision-safe mouse evasion.
 
 ## 5 Data and authorization
 Migrations live in supabase/migrations. Supabase local CLI configuration is supabase/config.toml. Schema changes use npx supabase migration new NAME; review SQL before applying. Local-only rollback assertions in supabase/tests/security.sql test grants/RLS/RPC behavior. Owner-scoped RLS protects admin data. Server-only elevated operations explicitly verify recipient or admin membership; service-role credentials bypass RLS and never go to client bundles. Shared TS domain contracts currently used rather than generated Supabase database types.

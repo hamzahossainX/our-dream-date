@@ -16,3 +16,19 @@ docs/system-design-qa/
 *.mp4
 .DS_Store
 .vercel
+
+# Local agent tooling and workflow — keep out of published source
+.claude/
+.agents/
+.codex/
+AGENTS.md
+CLAUDE.md
+GENESIS.md
+docs/_seed/
+docs/TEAM.md
+docs/GENESIS_AUDIT.md
+docs/WORKFLOW.md
+docs/CONTEXT_PROTOCOL.md
+docs/SESSION_PROTOCOL.md
+docs/DECISION_RIGHTS.md
+docs/INVENTORY.md
