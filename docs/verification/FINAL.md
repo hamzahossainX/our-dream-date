@@ -35,3 +35,5 @@ README, setup/deployment guide, About page, schema/RLS migration and template sy
 Native browser review of the live production alias verified hydration, keyboard decline, final browser save, same receipt on reload, reset, and Try demo → autofill → Open demo dashboard → four fictional samples. Saved [live invitation](screenshots/live-invitation.jpg) and [live admin demo](screenshots/live-admin-demo.jpg) screenshots. Production headers include HTTPS/HSTS, nonce CSP without unsafe-eval, no-store, no-referrer and frame denial. Ordinary fresh-checkout type checking now generates Next.js route types first; the updated command passed.
 
  A public demo does not claim hosted Supabase or automatic delivery of real replies.
+
+Git-connected deployment for final manifest/docs commit `ccc7cc2` also reached READY (Vercel deployment `4qwYEfkZUEG27ssKbTGsUXJQH9Xv`); GitHub reports Vercel success. No source code changed during the final release-record update.
