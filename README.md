@@ -12,7 +12,7 @@ The Next.js application supports a standalone gift demo and an optional Supabase
 
 The standalone recipient demo at `/demo` needs no database credentials. Its final reply stays in that browser's local storage. It does **not** send the reply to Fahim, synchronize across devices, or provide secure shared response management. Use Supabase when Fahim needs to receive and manage real replies from another device.
 
-The admin demo uses synthetic records in browser memory. It never signs in to Supabase or opens private responses. Demo edits and deletions reset on reload; exports and private-link generation require the real dashboard.
+The admin demo starts empty; the seeded sample replies have been removed. It never signs in to Supabase or opens private responses. Demo setting edits reset on reload; exports and private-link generation require the real dashboard.
 
 ## Features
 

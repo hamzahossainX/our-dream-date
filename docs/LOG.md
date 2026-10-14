@@ -23,3 +23,11 @@ In plain terms: The gift website now works locally, including the requested esca
 Added standalone browser-only recipient saving/download/reset, isolated autofill admin demo, improved button contrast and responsive layouts, About page and engineering README. Fixed the No button animation-containing-block issue and recorded future letter/decorative motion inT-011. Full local test run49passed; lint/build/typecheck passed. Published public hamzahossainX/our-dream-date, connected GitHub main to Vercel, deployed https://our-dream-date.vercel.app and verified live save/reload/reset/demo sign-in without a provider login. Local private credentials and reference video were excluded. Hosted Supabase remains optional.
 
 In plain terms: The gift demo is online and can be shared now; replies stay on the recipient’s browser and can be downloaded for manual sharing.
+
+## 2026-10-14 — Remove dashboard demo replies
+
+Owner requested deletion of all demo data. Removed the four seeded dashboard responses from source, so demo statistics and response lists stay empty after reload and on new devices. Kept demo login and configuration controls. No real database rows or accounts were deleted.
+
+In plain terms: The demo dashboard opens empty instead of bringing sample replies back.
+
+The owner also requested hiding the recipient BROWSER DEMO banner. Removed that top banner; review and saved-receipt states continue explaining browser-only storage and manual sharing.

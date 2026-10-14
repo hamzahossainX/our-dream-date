@@ -33,11 +33,9 @@ describe("isolated browser demo", () => {
     expect(readDemoReceipt(store)).toBeNull();
     expect(() => saveDemoReceipt({ ...storage(), setItem() { throw new Error("Storage blocked"); } }, input, DEFAULT_CONFIG)).toThrow("Storage blocked");
   });
-  it("uses public sample login values and fresh fictional records", () => {
+  it("uses public sample login values and starts with no sample replies", () => {
     expect(isDemoLogin(DEMO_LOGIN.email, DEMO_LOGIN.password)).toBe(true);
     expect(isDemoLogin(DEMO_LOGIN.email, "wrong")).toBe(false);
-    expect(demoResponses().every(response => response.message.startsWith("DEMO"))).toBe(true);
-    const samples = demoResponses(); samples.pop();
-    expect(demoResponses()).toHaveLength(4);
+    expect(demoResponses()).toEqual([]);
   });
 });

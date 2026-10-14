@@ -8,8 +8,18 @@ Completed local Next16.4/React19.3 app, optional secure Supabase Auth/API/RLS ba
 
 Full local test run49/49 passed; final ordinary run40passed9 opt-in skipped. Final lint/build passed including TypeScript. Runtime auditzero. SQL rollback asserts passed. Browser320/375/768/1440 no page overflow; frontend save/reload/download/reset and demo login/filter/settings/delete/reload verified. Mouse fixed-position bug from animation ancestor fixed using root portal; keyboard decline verified. Disposable UI fixture removed, original owner and gift token preserved.
 
-Published: public GitHub https://github.com/hamzahossainX/our-dream-date onmain; Vercel production https://our-dream-date.vercel.app. Project our-dream-date in existing owner account; .vercel linked and ignored. Initial deploymentdpl_6eJXhjMUqD3PAtbBuDiNPkEhwAaJ READY. Production alias HTTP200 publicly accessible; preview URLs have provider authentication. No production environment variables configured. Live browser save/reload/reset and demo login verified; screenshots docs/verification/screenshots/live-*.jpg. Fresh typecheck now next typegen +tsc passed; Node22.x pinned inmanifest.
+Published: public GitHub https://github.com/hamzahossainX/our-dream-date onmain; Vercel production https://our-dream-date.vercel.app. Project our-dream-date in existing owner account; .vercel linked and ignored. Initial deploymentdpl_6eJXhjMUqD3PAtbBuDiNPkEhwAaJ READY. Production alias HTTP200 publicly accessible; preview URLs have provider authentication. Owner supplied NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY; both are configured in Vercel Production as of2026-10-14. Values remain in provider configuration, not source. Live browser save/reload/reset and demo login verified; screenshots docs/verification/screenshots/live-*.jpg. Fresh typecheck now next typegen +tsc passed; Node22.x pinned inmanifest.
 
 Release complete: final manifest/documentation commitccc7cc2 pushed to GitHubmain, automatic Vercel production deployment4qwYEfkZUEG27ssKbTGsUXJQH9Xv reachedREADY and GitHub Vercel status success. Public alias stays https://our-dream-date.vercel.app. No remaining required release work.
 
 Next optional work: T-011 paper/decorative motion and personalization. Actual hosted shared replies require owner Supabase setup; public frontend demo intentionally does not send responses across devices. Resume from this checkpoint, do not rerun Genesis. Existing local Supabase/gift access stays private in ignored files.
+
+## Latest configuration update — 2026-10-14
+
+Added the two owner-provided public Supabase settings to Vercel Production and redeployed existing source. Deploymentdpl_HNEDzFscin6BAHuHKFhXevN4bD4N reachedREADY and the production alias was updated. Remaining real-backend prerequisites: SUPABASE_SERVICE_ROLE_KEY, INVITATION_SESSION_SECRET, INVITATION_ID, APP_URL, hosted migration, Auth owner user/membership/bootstrap. Until all are configured the root continues browser demo. Local .env.local and .local-access.txt were preserved. Provider environment values are not committed.
+
+## Active update — 2026-10-14
+
+Owner requested removing all dashboard demo data. Removed four seeded responses from lib/admin-demo.ts, updated UI/about/docs and existing credential/demo test. Demo login remains; lists/metrics initialize empty on every visit. Real database rows/accounts untouched. Next: lint/unit/build, commit/push, verify Vercel live empty dashboard after reload.
+
+Owner additionally requested hiding the recipient BROWSER DEMO banner. Removed only the top banner in InvitationExperience; browser-only storage disclosure remains at review/receipt. Include this in the pending empty-dashboard release and verify live /demo.
