@@ -7,6 +7,7 @@ import { DEFAULT_CONFIG } from "@/lib/defaults";
 import type { Answer, InvitationConfig, InvitationPayload, SavedResponse, SubmissionInput } from "@/lib/contracts";
 import "./invitation.css";
 import { RunawayNoButton } from "./RunawayNoButton";
+import { CoupleIllustration } from "./CoupleIllustration";
 import { DEMO_RECEIPT_KEY, demoReplyText, readDemoReceipt, saveDemoReceipt } from "@/lib/browser-demo";
 
 type Step = "welcome" | "date" | "preferences" | "note" | "review" | "saved";
@@ -31,7 +32,7 @@ function LetterIllustration() {
     <svg viewBox="0 0 420 340" className="invite-envelope-svg">
       <defs><filter id="letter-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="9" stdDeviation="10" floodColor="currentColor" floodOpacity=".1" /></filter></defs>
       <g className="invite-envelope-back"><path d="M60 166 210 53l150 113v131H60Z" fill="var(--invite-envelope-deep)"/><path d="m60 166 150 104 150-104" fill="none" stroke="var(--invite-line)"/></g>
-      <g className="invite-letter" filter="url(#letter-shadow)"><rect x="94" y="67" width="232" height="206" rx="4" fill="var(--invite-paper)"/><path d="M114 86h192v166H114Z" fill="none" stroke="var(--invite-line)"/><text x="210" y="122" textAnchor="middle" className="invite-svg-small">A LITTLE NOTE</text><text x="210" y="163" textAnchor="middle" className="invite-svg-script">for my favourite person</text><path d="M155 187h110m-97 14h84" stroke="var(--invite-line)" strokeWidth="2"/><path d="M210 226c-23-15-20-31-9-31 5 0 9 4 9 7 1-3 5-7 10-7 11 0 14 16-10 31Z" fill="var(--invite-rose-soft)"/></g>
+      <g className="invite-letter" filter="url(#letter-shadow)"><g className="invite-letter-float"><rect x="94" y="67" width="232" height="206" rx="4" fill="var(--invite-paper)"/><path d="M114 86h192v166H114Z" fill="none" stroke="var(--invite-line)"/><text x="210" y="122" textAnchor="middle" className="invite-svg-small">A LITTLE NOTE</text><text x="210" y="163" textAnchor="middle" className="invite-svg-script">for my favourite person</text><path d="M155 187h110m-97 14h84" stroke="var(--invite-line)" strokeWidth="2"/><path d="M210 226c-23-15-20-31-9-31 5 0 9 4 9 7 1-3 5-7 10-7 11 0 14 16-10 31Z" fill="var(--invite-rose-soft)"/></g></g>
       <path d="M60 167 210 259 360 167v130a8 8 0 0 1-8 8H68a8 8 0 0 1-8-8Z" fill="var(--invite-envelope-light)"/>
       <path d="m60 297 150-98 150 98" fill="var(--invite-envelope-front)" stroke="var(--invite-line)" strokeWidth=".8"/>
       <circle cx="210" cy="249" r="23" fill="var(--invite-accent)"/><circle cx="210" cy="249" r="18" fill="none" stroke="var(--invite-seal-line)"/><path d="M210 258c-15-10-13-20-6-20 3 0 6 2 6 5 1-3 3-5 7-5 7 0 9 10-7 20Z" fill="var(--invite-paper)"/>
@@ -40,7 +41,7 @@ function LetterIllustration() {
       <g transform="translate(351 102) rotate(25)" fill="var(--invite-flower-petal)" stroke="var(--invite-rose-muted)"><ellipse cy="-12" rx="7" ry="14"/><ellipse cy="12" rx="7" ry="14"/><ellipse cx="12" rx="14" ry="7"/><ellipse cx="-12" rx="14" ry="7"/><circle r="5" fill="var(--invite-paper)"/></g>
       <path d="m350 128 21 44m-12-25q21-8 21 5-12 9-21-5Z" stroke="var(--invite-leaf)" fill="none" strokeWidth="2"/>
     </svg>
-    <span className="invite-floating-heart invite-heart-one">♡</span><span className="invite-floating-heart invite-heart-two">✧</span><span className="invite-envelope-caption">sealed with a little love</span>
+    <span className="invite-floating-heart invite-heart-one">♡</span><span className="invite-floating-heart invite-heart-three">♡</span><span className="invite-floating-heart invite-heart-four">✧</span><span className="invite-floating-heart invite-heart-two">✧</span><span className="invite-envelope-caption">sealed with a little love</span>
   </div>;
 }
 
@@ -211,7 +212,7 @@ export function InvitationExperience({ initialPayload, token, demo = false }: { 
       {openingFailed && <section className="invite-confirmation invite-opening-failure"><span className="invite-section-icon"><Mail size={22}/></span><span className="invite-eyebrow">YOUR PERSONAL INVITATION</span><h1>We couldn’t open this invitation.</h1><p className="invite-confirmation-copy" role="alert">{error}</p><p className="invite-no-pressure">Please try again, or ask Fahim for a fresh personal invitation link.</p></section>}
       {!openingFailed && step === "welcome" && <section className="invite-welcome invite-animate-in">
         <div className="invite-hero-copy"><span className="invite-eyebrow"><span/> A DATE WITH YOUR FAVOURITE PERSON</span><h1 ref={headingRef} tabIndex={-1}>{config.title.split("\n").map((line, index) => <span key={index}>{line}</span>)}</h1><p className="invite-subtitle">{config.subtitle}</p><div className="invite-tiny-rule"><span/><Heart size={13}/><span/></div><div className="invite-personal-note"><span className="invite-handwriting">Dear {config.recipientName},</span><p>{config.openingNote}</p><span className="invite-signature">Always yours, <span>{config.senderName}</span><Heart size={13}/></span></div><h2 className="invite-question">Will you go on a date with me?</h2><div className="invite-answer-buttons"><button className="invite-button invite-primary" onClick={() => chooseAnswer("yes")}>Yes, a thousand times <Heart size={16}/></button><RunawayNoButton onChoose={() => chooseAnswer("no")} /></div><p className="invite-no-pressure">No pressure. Just a little invitation, from my heart to yours.</p></div>
-        <div className="invite-hero-art"><span className="invite-art-note">Something lovely<br/>starts with a yes.</span><LetterIllustration/><div className="invite-art-footer"><span className="invite-art-sparkle">✧</span><span>one date. a million little memories.</span><span className="invite-art-sparkle">✧</span></div></div>
+        <div className="invite-hero-art"><span className="invite-art-note">Something lovely<br/>starts with a yes.</span><LetterIllustration/><CoupleIllustration/><div className="invite-art-footer"><span className="invite-art-sparkle">✧</span><span>one date. a million little memories.</span><span className="invite-art-sparkle">✧</span></div></div>
       </section>}
       {!openingFailed && isFlow && <section className="invite-flow invite-animate-in" aria-label="Your invitation reply">
         <button className="invite-back" onClick={back} disabled={saving}><ArrowLeft size={16}/> Back</button>

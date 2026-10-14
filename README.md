@@ -16,8 +16,8 @@ The admin demo starts empty; the seeded sample replies have been removed. It nev
 
 ## Features
 
-- Responsive English invitation with an animated letter, calendar, time slots, configurable questions, optional note, review, and saved receipt.
-- A stationary “Yes, a thousand times” button and playful “No” button that moves away from mouse attempts. Keyboard and touch still support declining; reduced-motion settings remove movement transitions.
+- Responsive English invitation with a gently floating letter, hearts, and an animated couple exchanging a flower; calendar, time slots, configurable questions, optional note, review, and saved receipt.
+- A stationary “Yes, a thousand times” button and playful “No” button that moves to varied safe locations away from mouse attempts. Keyboard and touch still support declining; reduced-motion settings remove movement transitions.
 - Standalone demo with browser-local final reply storage; clear and try again for testing.
 - Optional private invitations store only complete, validated replies in Supabase. Atomic saving and a unique recipient constraint prevent duplicate submissions across devices.
 - Authenticated dashboard with statistics, search, filters, response detail, deletion, CSV/Excel export, and versioned invitation customization.

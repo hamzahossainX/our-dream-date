@@ -37,3 +37,7 @@ Native browser review of the live production alias verified hydration, keyboard 
  A public demo does not claim hosted Supabase or automatic delivery of real replies.
 
 Git-connected deployment for final manifest/docs commit `ccc7cc2` also reached READY (Vercel deployment `4qwYEfkZUEG27ssKbTGsUXJQH9Xv`); GitHub reports Vercel success. No source code changed during the final release-record update.
+
+## Cleanup and animation update — 2026-10-14
+
+Removed seeded demo replies so dashboard totals/list remain empty after reload. Hid the recipient top BROWSER DEMO banner while retaining browser-only storage disclosure at review and receipt. Added a flower-offering couple SVG, animated paper drift, extra floating hearts, and varied safe No placement. Reviewed native browser375px and1440px layouts without horizontal overflow; observed changing transforms for paper/hand/sway/heart motion. Mouse No stayed within the viewport and Yes retained its rectangle. Existing reduced-motion rule covers all new SVG animations. Ordinary unit suite passed40 tests; the expanded No placement suite passed5 tests, including all ten variation choices. Lint passed.

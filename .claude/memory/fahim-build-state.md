@@ -23,3 +23,9 @@ Added the two owner-provided public Supabase settings to Vercel Production and r
 Owner requested removing all dashboard demo data. Removed four seeded responses from lib/admin-demo.ts, updated UI/about/docs and existing credential/demo test. Demo login remains; lists/metrics initialize empty on every visit. Real database rows/accounts untouched. Next: lint/unit/build, commit/push, verify Vercel live empty dashboard after reload.
 
 Owner additionally requested hiding the recipient BROWSER DEMO banner. Removed only the top banner in InvitationExperience; browser-only storage disclosure remains at review/receipt. Include this in the pending empty-dashboard release and verify live /demo.
+
+## Animation work — 2026-10-14
+
+Prior empty-dashboard/banner removal commitb017f4a is live (Vercel success). Owner now requested applying deferred animation and a boy inviting a girl avatar. Added CoupleIllustration.tsx SVG flower-offering scene, paper drift and extra hearts, restrained couple movement; random variation among ten safe No positions. Existing unit40passed plus expanded placement5passed; lint passed before the new test-only addition. Native browser375px and default desktop977px reviewed; actual letter/hand/sway/heart transforms change over time; no page overflow. Next: final build/lint, commit/push, verify live /demo and empty dashboard, update this checkpoint.
+
+Final animation build passed (detached production build exit0); lint passed. Owner approved the design and explicitly requested completing and pushing it. Phone375 and desktop1440 native review passed; varied No remained inside the viewport with Yes stationary. Next exact step: commit/push approved animation, then verify Vercel readiness/live illustration and empty demo dashboard.

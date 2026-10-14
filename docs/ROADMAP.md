@@ -13,4 +13,4 @@
 Local test access lives only in ignored .local-access.txt. Hosted deployment is not implied by these completed local tickets.
 
 - [x] T-010 Frontend-only recipient demo, download/reset, isolated admin demo login, About, README
-- [ ] T-011 Later animation polish requested by owner: wider variety of No resting positions; subtle repeated paper/letter and surrounding decoration movement, respecting reduced motion and avoiding controls. Current No already evades mouse across the viewport.
+- [x] T-011 Apply paper drift, floating hearts and animated flower-offering couple SVG; No varies among safe resting positions. Reduced-motion guard retained; phone and desktop browser review.

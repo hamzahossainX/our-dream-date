@@ -31,3 +31,7 @@ Owner requested deletion of all demo data. Removed the four seeded dashboard res
 In plain terms: The demo dashboard opens empty instead of bringing sample replies back.
 
 The owner also requested hiding the recipient BROWSER DEMO banner. Removed that top banner; review and saved-receipt states continue explaining browser-only storage and manual sharing.
+
+## 2026-10-14 — Romantic motion and couple artwork
+
+Applied subtle repeated letter drift and extra floating hearts. Added editable SVG artwork of a boy offering a flower to a girl, with restrained hand/sway/heart motion. No selects among ten safe placement candidates instead of repeatedly preferring one corner; bounded placement tests pass. All artwork uses semantic palette tokens and existing reduced-motion rules. Verified phone375px without horizontal overflow and observed changing CSS animation transforms in the browser.

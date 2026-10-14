@@ -20,7 +20,7 @@ export function RunawayNoButton({ onChoose }: { onChoose: () => void }) {
       .filter(control => control !== element)
       .map(control => control.getBoundingClientRect())
       .filter(box => box.width > 0 && box.height > 0 && box.bottom > 0 && box.top < window.innerHeight && box.right > 0 && box.left < window.innerWidth);
-    const next = runawayPosition({ width: window.innerWidth, height: window.innerHeight }, rect, pointer, exclusions, positionRef.current || undefined);
+    const next = runawayPosition({ width: window.innerWidth, height: window.innerHeight }, rect, pointer, exclusions, positionRef.current || undefined, Math.random());
     if (!next) return;
     setPortalHost(element.closest<HTMLElement>(".invite-root"));
     setSlotSize(current => current || { width: rect.width, height: rect.height });

@@ -18,6 +18,9 @@
   --invite-envelope-front: #e6cbbd;
   --invite-flower-petal: #e9babb;
   --invite-seal-line: #b67b8a;
+  --invite-avatar-skin: #edb79e;
+  --invite-avatar-hair: #4f3940;
+  --invite-avatar-shirt: #879782;
   --invite-shadow: 0 12px 65px rgb(98 62 55 / 5%);
   --invite-font-serif: var(--font-editorial, Georgia, 'Times New Roman', serif);
   --invite-font-script: var(--font-handwritten, 'Brush Script MT', 'Segoe Script', cursive);
@@ -92,10 +95,21 @@
 .invite-svg-small { font-family: inherit; font-size: 8px; letter-spacing: 3px; fill: var(--invite-muted); }
 .invite-svg-script { font-family: var(--invite-font-script); font-size: 20px; fill: var(--invite-accent); }
 .invite-letter { transform-origin: center; animation: invite-letter-arrive 1.2s ease both; }
+.invite-letter-float { transform-origin: 210px 210px; animation: invite-paper-drift 5s ease-in-out 1.2s infinite; }
 .invite-envelope-caption { display: block; font-family: var(--invite-font-script); font-size: 24px; color: var(--invite-accent); text-align: center; margin: -4px 0 20px; transform: rotate(-4deg); }
 .invite-floating-heart { position: absolute; color: var(--invite-rose-soft); font-size: 29px; animation: invite-float 5s ease-in-out infinite; }
 .invite-heart-one { right: 10%; top: 3%; transform: rotate(10deg); }
 .invite-heart-two { top: 19%; left: 5%; font-size: 26px; animation-delay: -2s; }
+.invite-heart-three { right: 4%; top: 48%; font-size: 21px; animation-delay: -3s; }
+.invite-heart-four { left: 13%; top: 3%; font-size: 18px; animation-delay: -1s; }
+.invite-floating-heart { pointer-events: none; }
+.invite-couple-moment { position: relative; z-index: 2; width: 225px; max-width: 75%; margin: -10px auto 24px; text-align: center; pointer-events: none; }
+.invite-couple-moment svg { width: 100%; height: auto; display: block; overflow: visible; }
+.invite-couple-moment figcaption { font-family: var(--invite-font-serif); font-style: italic; font-size: 12px; color: var(--invite-muted); margin-top: 3px; }
+.invite-couple-offer { transform-origin: 101px 87px; animation: invite-flower-offer 4s ease-in-out infinite; }
+.invite-couple-girl { transform-origin: 191px 151px; animation: invite-happy-sway 4.5s ease-in-out infinite; }
+.invite-couple-heart { animation: invite-heart-rise 4s ease-in-out infinite; }
+.invite-couple-sparkle { transform-origin: 233px 51px; animation: invite-sparkle-turn 6s ease-in-out infinite; }
 .invite-art-footer { z-index: 1; display: flex; gap: 18px; align-items: center; justify-content: center; color: var(--invite-muted); font-size: 10px; letter-spacing: 1px; }
 .invite-art-sparkle { color: var(--invite-rose-soft); font-size: 22px; }
 .invite-background-flower { color: var(--invite-line); opacity: .45; font-size: 210px; position: absolute; line-height: 1; pointer-events: none; }
@@ -207,6 +221,11 @@
 .invite-animate-in { animation: invite-arrive .55s ease both; }
 @keyframes invite-arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes invite-letter-arrive { from { transform: translateY(25px); } to { transform: translateY(0); } }
+@keyframes invite-paper-drift { 0%, 100% { transform: translateY(0) rotate(-.4deg); } 50% { transform: translateY(-10px) rotate(.8deg); } }
+@keyframes invite-flower-offer { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-5deg); } }
+@keyframes invite-happy-sway { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1.5deg); } }
+@keyframes invite-heart-rise { 0%, 100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(-7px); opacity: 1; } }
+@keyframes invite-sparkle-turn { 0%, 100% { transform: rotate(-8deg) scale(.9); opacity: .6; } 50% { transform: rotate(8deg) scale(1.05); opacity: 1; } }
 @keyframes invite-float { 0%, 100% { transform: translateY(0) rotate(10deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
 @media (min-width: 1500px) { .invite-welcome { padding-top: 90px; padding-bottom: 100px; } }
 @media (min-width: 1001px) and (max-height: 850px) {

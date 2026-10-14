@@ -24,4 +24,18 @@ describe("playful No placement", () => {
   it("does not cover other controls when there is no safe space", () => {
     expect(runawayPosition({ width: 200, height: 100 }, { width: 160, height: 48 }, { x: 50, y: 50 }, [{ left: 0, top: 0, width: 200, height: 100 }])).toBeNull();
   });
+  it("varies its resting places while keeping every choice on screen and clear of Yes", () => {
+    const yes = { left: 50, top: 500, width: 230, height: 48 };
+    const positions = Array.from({ length: 10 }, (_, index) => runawayPosition(
+      { width: 1200, height: 800 }, { width: 80, height: 48 }, { x: 330, y: 520 }, [yes], undefined, index / 10,
+    )!);
+    expect(new Set(positions.map(point => `${point.x},${point.y}`)).size).toBeGreaterThan(4);
+    for (const point of positions) {
+      expect(point.x).toBeGreaterThanOrEqual(0);
+      expect(point.y).toBeGreaterThanOrEqual(0);
+      expect(point.x + 80).toBeLessThanOrEqual(1200);
+      expect(point.y + 48).toBeLessThanOrEqual(800);
+      expect(point.x > yes.left + yes.width || point.x + 80 < yes.left || point.y > yes.top + yes.height || point.y + 48 < yes.top).toBe(true);
+    }
+  });
 });
