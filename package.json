@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start --hostname 127.0.0.1 --port 3000",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "e2e": "RUN_INTEGRATION=1 vitest run tests/integration.test.ts",
     "bootstrap": "tsx scripts/bootstrap-invitation.ts",
@@ -40,5 +40,8 @@
     "exceljs": {
       "uuid": "11.1.1"
     }
+  },
+  "engines": {
+    "node": "22.x"
   }
 }

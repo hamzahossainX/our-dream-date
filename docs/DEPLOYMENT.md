@@ -1,6 +1,6 @@
 # Deploy Our Dream Date through GitHub
 
-Choose between a standalone demonstration and real private replies. Both use **GitHub → Vercel** for this Next.js source. Add hosted Supabase only when Fahim needs to receive replies across devices and use a secure real dashboard. No hosted project, remote repository, or production deployment has been created by this handover.
+Choose between a standalone demonstration and real private replies. Both use **GitHub → Vercel** for this Next.js source. Add hosted Supabase only when Fahim needs to receive replies across devices and use a secure real dashboard. Frontend production release completed on2026-10-14: https://our-dream-date.vercel.app . Public repository: https://github.com/hamzahossainX/our-dream-date . Vercel is connected to main for future deployments. Hosted Supabase is intentionally not configured for this demo.
 
 Recommended repository name: `our-dream-date`. Keep it private while configuring the gift and reviewing personal wording. Repository visibility does not replace database authorization or private recipient links.
 

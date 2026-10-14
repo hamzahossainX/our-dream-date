@@ -1,6 +1,6 @@
 # Fahim build state
 
-Updated2026-10-13 Asia/Dhaka.
+Updated2026-10-14 Asia/Dhaka.
 
 Owner authorized building after plan review, English, local video reference. Latest scope: frontend testing gift for friend's partner; repo name our-dream-date. Explicitly authorized public GitHub upload and final deployment. Mouse No evades attempts, Yes remains stationary; keyboard/touch No supported. Further paper/decoration movement is requested later and trackedT-011.
 
@@ -8,4 +8,6 @@ Completed local Next16.4/React19.3 app, optional secure Supabase Auth/API/RLS ba
 
 Full local test run49/49 passed; final ordinary run40passed9 opt-in skipped. Final lint/build passed including TypeScript. Runtime auditzero. SQL rollback asserts passed. Browser320/375/768/1440 no page overflow; frontend save/reload/download/reset and demo login/filter/settings/delete/reload verified. Mouse fixed-position bug from animation ancestor fixed using root portal; keyboard decline verified. Disposable UI fixture removed, original owner and gift token preserved.
 
-Next: finalize public source scan/commit, create hamzahossainX/our-dream-date GitHub repo, deploy frontend no-env to Vercel using existing verified account, connect Git repository and verify live demo. Hosted Supabase not requested for this frontend testing release. Update README/deployment/verification and this checkpoint with real URLs after success. Further motion/personalization remain optional backlog.
+Published: public GitHub https://github.com/hamzahossainX/our-dream-date onmain; Vercel production https://our-dream-date.vercel.app. Project our-dream-date in existing owner account; .vercel linked and ignored. Initial deploymentdpl_6eJXhjMUqD3PAtbBuDiNPkEhwAaJ READY. Production alias HTTP200 publicly accessible; preview URLs have provider authentication. No production environment variables configured. Live browser save/reload/reset and demo login verified; screenshots docs/verification/screenshots/live-*.jpg. Fresh typecheck now next typegen +tsc passed; Node22.x pinned inmanifest.
+
+Next: push final release documentation/manifest commit to main, verify resulting Git-triggered deployment reaches READY. No need to rerun Genesis. Future optional work is T-011 paper/decorative motion and personalization. Actual hosted shared replies require owner Supabase setup; public frontend demo intentionally does not send responses across devices.

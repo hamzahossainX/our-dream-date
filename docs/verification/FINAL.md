@@ -28,4 +28,10 @@ Screenshots: [desktop invitation](screenshots/invitation-desktop.jpg), [phone in
 
 README, setup/deployment guide, About page, schema/RLS migration and template system design DOCX are included. The seven-page DOCX was rendered and visually reviewed; local QA artifacts are ignored. Additional letter/paper/decoration motion requested for later is tracked in T-011. Personal names/availability/photos are still configurable defaults.
 
-Hosted release results will be appended once the actual provider deployment completes. A public demo does not claim hosted Supabase or automatic delivery of real replies.
+## Public release — 2026-10-14
+
+[Live website](https://our-dream-date.vercel.app/) and [public GitHub source](https://github.com/hamzahossainX/our-dream-date) published. Vercel deployment dpl_6eJXhjMUqD3PAtbBuDiNPkEhwAaJ reached READY after a successful hosted Next.js/TypeScript build. The production alias returns HTTP200 without authentication; provider-generated preview URLs may require Vercel authentication. The project is connected to GitHub main. No production environment variables or hosted Supabase were added.
+
+Native browser review of the live production alias verified hydration, keyboard decline, final browser save, same receipt on reload, reset, and Try demo → autofill → Open demo dashboard → four fictional samples. Saved [live invitation](screenshots/live-invitation.jpg) and [live admin demo](screenshots/live-admin-demo.jpg) screenshots. Production headers include HTTPS/HSTS, nonce CSP without unsafe-eval, no-store, no-referrer and frame denial. Ordinary fresh-checkout type checking now generates Next.js route types first; the updated command passed.
+
+ A public demo does not claim hosted Supabase or automatic delivery of real replies.

@@ -8,7 +8,7 @@
 - [x] T-006 Unit real database and real API integration verification
 - [x] T-007 Requested mouse-evading No and stable Yes; keyboard/touch preserved
 - [ ] T-008 Final personalization with wife's name optional photos and availability
-- [ ] T-009 Owner hosted Supabase Vercel and repository handover; reviewed live release
+- [x] T-009 Public GitHub source/report handover and Vercel frontend demo release; verified live2026-10-14. Hosted Supabase deferred for testing scope.
 
 Local test access lives only in ignored .local-access.txt. Hosted deployment is not implied by these completed local tickets.
 

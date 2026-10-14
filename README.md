@@ -2,11 +2,13 @@
 
 A romantic invitation for a partner: open a private letter, say yes, choose a date and time, pick activities, and leave a personal note. Built for Fahim's gift, with configurable wording that can suit a wife, girlfriend, or other partner.
 
-Recommended GitHub repository name: **`our-dream-date`**.
+[Live invitation](https://our-dream-date.vercel.app/) · [Admin demo login](https://our-dream-date.vercel.app/admin/login) · [About](https://our-dream-date.vercel.app/about) · [Public verification report](https://github.com/hamzahossainX/our-dream-date/blob/main/docs/verification/FINAL.md)
+
+Public repository: [hamzahossainX/our-dream-date](https://github.com/hamzahossainX/our-dream-date).
 
 ## Status
 
-The Next.js application supports a standalone gift demo and an optional Supabase-backed private invitation. The local Supabase environment is implemented. GitHub remote and Vercel deployment still need the owner's accounts and configuration. A local preview is not a public website.
+The Next.js application supports a standalone gift demo and an optional Supabase-backed private invitation. The frontend demo is publicly deployed on Vercel and connected to this GitHub repository. The optional local Supabase environment is implemented; hosted Supabase is not configured for this demonstration.
 
 The standalone recipient demo at `/demo` needs no database credentials. Its final reply stays in that browser's local storage. It does **not** send the reply to Fahim, synchronize across devices, or provide secure shared response management. Use Supabase when Fahim needs to receive and manage real replies from another device.
 
@@ -36,7 +38,7 @@ Exact versions and scripts are recorded in `package.json` and `package-lock.json
 
 ## Run the standalone gift/demo
 
-Install Node.js 22 or newer and npm:
+Install Node.js 22.x and npm:
 
 ```sh
 npm ci
@@ -47,7 +49,7 @@ Open [the standalone invitation](http://127.0.0.1:3000/demo) or [the admin demo]
 
 ## Enable real private replies locally
 
-Install Node.js 22 or newer, npm, and a running Docker-compatible container runtime. The Supabase CLI is a project dependency; no global CLI install is needed.
+Install Node.js 22.x, npm, and a running Docker-compatible container runtime. The Supabase CLI is a project dependency; no global CLI install is needed.
 
 ```sh
 npm ci
@@ -136,3 +138,7 @@ Review the invitation and dashboard at phone, tablet, and desktop sizes, includi
 ## Handover
 
 Start with [SETUP.md](docs/SETUP.md), [DEPLOYMENT.md](docs/DEPLOYMENT.md), [STACK.md](docs/STACK.md), and [DATA_MODEL.md](docs/DATA_MODEL.md). The formatted system design is [SYSTEM_DESIGN.docx](docs/SYSTEM_DESIGN.docx). The reference video stays local and is ignored by Git. No public software license has been selected; the owner should choose one before publishing the source for reuse.
+
+## Live preview
+
+![Our Dream Date deployed invitation](docs/verification/screenshots/live-invitation.jpg)
