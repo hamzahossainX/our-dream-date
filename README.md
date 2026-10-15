@@ -12,7 +12,7 @@ The Next.js application supports a standalone gift demo and an optional Supabase
 
 The standalone recipient demo at `/demo` needs no database credentials. Its final reply stays in that browser's local storage. It does **not** send the reply to Fahim, synchronize across devices, or provide secure shared response management. Use Supabase when Fahim needs to receive and manage real replies from another device.
 
-The admin demo starts empty; the seeded sample replies have been removed. It never signs in to Supabase or opens private responses. Demo setting edits reset on reload; exports and private-link generation require the real dashboard.
+The admin demo starts empty; the seeded sample replies have been removed. It never signs in to Supabase or opens private responses. Demo settings save in this browser and survive reload. A personalized link carries a snapshot of the saved design to another device; replies remain in the recipient’s browser. Exports and server-backed private links require the real dashboard.
 
 ## Features
 
@@ -45,7 +45,7 @@ npm ci
 npm run dev
 ```
 
-Open [the standalone invitation](http://127.0.0.1:3000/demo) or [the admin demo](http://127.0.0.1:3000/admin/demo). No Supabase account, Docker, API key, or real admin login is required for these demo routes. Clearing browser storage removes the recipient's local reply. Admin demo edits reset when the page reloads.
+Open [the standalone invitation](http://127.0.0.1:3000/demo) or [the admin demo](http://127.0.0.1:3000/admin/demo). No Supabase account, Docker, API key, or real admin login is required for these demo routes. Clearing browser storage removes local settings and replies. In the admin demo, open Invitation, edit the design, and select **Save changes in this browser**. Use **View saved invitation** for a preview without replacing an existing reply. Select **Create personalized link** and copy the full URL to share the saved design. Create a new link after further edits; existing links keep their original design. These URLs contain the wording and choices, are not encrypted, and do not deliver replies to the sender.
 
 ## Enable real private replies locally
 
@@ -133,7 +133,7 @@ Review the invitation and dashboard at phone, tablet, and desktop sizes, includi
 | Browser rejects a request | Open the exact `APP_URL` origin; check the configured production URL and cookie settings. |
 | Missing tables or functions | Apply the reviewed migrations to the correct database. |
 | A reply cannot be submitted again | The link permits one completed reply, including after deletion. Create a fresh test link. |
-| Demo edits disappear | Demo data intentionally resets on reload; real persistence requires the authenticated dashboard. |
+| Demo edits do not appear | Save changes in the admin demo, then open View saved invitation in the same browser. Another device needs the generated personalized link. Enable browser storage; clearing it removes settings. |
 
 ## Handover
 

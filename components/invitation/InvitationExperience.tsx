@@ -9,6 +9,7 @@ import "./invitation.css";
 import { RunawayNoButton } from "./RunawayNoButton";
 import { CoupleIllustration } from "./CoupleIllustration";
 import { DEMO_RECEIPT_KEY, demoReplyText, readDemoReceipt, saveDemoReceipt } from "@/lib/browser-demo";
+import { DEMO_CONFIG_KEY, demoReceiptStore, readDemoConfig, readDemoGift } from "@/lib/demo-settings";
 
 type Step = "welcome" | "date" | "preferences" | "note" | "review" | "saved";
 const PREVIEW: InvitationPayload = { config: DEFAULT_CONFIG, configured: false, authorized: false, response: null };
@@ -68,7 +69,7 @@ function Calendar({ config, value, onChange }: { config: InvitationConfig; value
   </div>;
 }
 
-export function InvitationExperience({ initialPayload, token, demo = false }: { initialPayload?: InvitationPayload; token?: string; demo?: boolean }) {
+export function InvitationExperience({ initialPayload, token, demo = false, preview = false }: { initialPayload?: InvitationPayload; token?: string; demo?: boolean; preview?: boolean }) {
   const [payload, setPayload] = useState(initialPayload || PREVIEW);
   const [loading, setLoading] = useState(!initialPayload);
   const [openingFailed, setOpeningFailed] = useState(false);
@@ -83,11 +84,12 @@ export function InvitationExperience({ initialPayload, token, demo = false }: { 
   const [receipt, setReceipt] = useState<SavedResponse | null>(initialPayload?.response || null);
   const [idempotencyKey, setIdempotencyKey] = useState<string | null>(null);
   const initialRequest = useRef<Promise<InvitationPayload> | null>(null);
+  const sharedDemoId = useRef<string | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const config = payload.config;
   const messageMaxLength = config.messageMaxLength;
   const questions = config.questions.filter((question) => question.appliesTo === "both" || question.appliesTo === answer);
-  const canSave = (demo || (payload.configured && payload.authorized)) && Boolean(idempotencyKey);
+  const canSave = !preview && (demo || (payload.configured && payload.authorized)) && Boolean(idempotencyKey);
 
   async function getInvitation() {
     const response = await fetch("/api/invitation", { cache: "no-store" });
@@ -102,10 +104,15 @@ export function InvitationExperience({ initialPayload, token, demo = false }: { 
     if (!initialRequest.current) initialRequest.current = (async () => {
       if (demo) {
         setIdempotencyKey(crypto.randomUUID());
+        const gift = readDemoGift(window.location.hash);
+        sharedDemoId.current = gift?.id ?? null;
+        let config = gift?.config || DEFAULT_CONFIG;
         let response: SavedResponse | null = null;
-        try { response = readDemoReceipt(window.localStorage); }
-        catch { setError("Browser storage is unavailable. Enable it to save a demo reply."); }
-        return { ...PREVIEW, response };
+        try {
+          if (!gift) config = readDemoConfig(window.localStorage);
+          if (!preview) response = readDemoReceipt(demoReceiptStore(window.localStorage, sharedDemoId.current));
+        } catch { setError("Browser storage is unavailable. Enable it to keep settings and replies after reload."); }
+        return { ...PREVIEW, config, response };
       }
       const privateToken = new URLSearchParams(window.location.hash.slice(1)).get("invite") || token;
       if (privateToken) {
@@ -118,7 +125,21 @@ export function InvitationExperience({ initialPayload, token, demo = false }: { 
     })();
     initialRequest.current.then((result) => { if (active) { setPayload(result); setReceipt(result.response); if (result.response) setStep("saved"); } }).catch((err: unknown) => { if (active) { setOpeningFailed(true); setError(err instanceof Error ? err.message : "Your invitation couldn't be opened."); } }).finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [token, demo]);
+  }, [token, demo, preview]);
+
+  useEffect(() => {
+    if (!demo) return;
+    const refresh = () => {
+      if (sharedDemoId.current) return;
+      try { const config = readDemoConfig(window.localStorage); setPayload(current => ({ ...current, config })); }
+      catch { setError("Your browser couldn't load the saved invitation settings."); }
+    };
+    const onStorage = (event: StorageEvent) => { if (event.key === DEMO_CONFIG_KEY || event.key === null) refresh(); };
+    // A different gift fragment represents a different personalized invitation.
+    const onGiftChange = () => { if (new URLSearchParams(window.location.hash.slice(1)).has("gift") || sharedDemoId.current) window.location.reload(); };
+    window.addEventListener("storage", onStorage); window.addEventListener("focus", refresh); window.addEventListener("hashchange", onGiftChange);
+    return () => { window.removeEventListener("storage", onStorage); window.removeEventListener("focus", refresh); window.removeEventListener("hashchange", onGiftChange); };
+  }, [demo]);
 
   useEffect(() => { if (step !== "welcome") headingRef.current?.focus({ preventScroll: true }); }, [step]);
 
@@ -161,7 +182,7 @@ export function InvitationExperience({ initialPayload, token, demo = false }: { 
     const input: SubmissionInput = { answer, chosenDate: answer === "yes" ? chosenDate : null, timeSlotId: answer === "yes" ? timeSlotId : null, selections: Object.fromEntries(questions.map((question) => [question.id, selections[question.id] || []])), message, configVersion: config.version, idempotencyKey: idempotencyKey! };
     try {
       if (demo) {
-        const saved = saveDemoReceipt(window.localStorage, input, config);
+        const saved = saveDemoReceipt(demoReceiptStore(window.localStorage, sharedDemoId.current), input, config);
         setReceipt(saved); setStep("saved"); return;
       }
       const response = await fetch("/api/responses", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
@@ -193,7 +214,7 @@ export function InvitationExperience({ initialPayload, token, demo = false }: { 
     anchor.click(); window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   function resetDemo() {
-    try { window.localStorage.removeItem(DEMO_RECEIPT_KEY); setReceipt(null); setChosenDate(""); setTimeSlotId(""); setSelections({}); setMessage(""); setIdempotencyKey(crypto.randomUUID()); go("welcome"); }
+    try { demoReceiptStore(window.localStorage, sharedDemoId.current).removeItem(DEMO_RECEIPT_KEY); setReceipt(null); setChosenDate(""); setTimeSlotId(""); setSelections({}); setMessage(""); setIdempotencyKey(crypto.randomUUID()); go("welcome"); }
     catch { setError("Your browser couldn't clear this demo reply. Check its storage settings."); }
   }
   const chosenTime = config.timeSlots.find((slot) => slot.id === timeSlotId);
@@ -221,7 +242,7 @@ export function InvitationExperience({ initialPayload, token, demo = false }: { 
           {step === "date" && <><div className="invite-step-heading"><span className="invite-section-icon"><CalendarDays size={21}/></span><span className="invite-eyebrow">LET’S MAKE A LITTLE TIME FOR US</span><h1 ref={headingRef} tabIndex={-1}>First, pick our day.</h1><p>A moment to look forward to. A little space for just us.</p></div><div className="invite-date-layout"><Calendar config={config} value={chosenDate} onChange={(value) => { setChosenDate(value); setError(""); }}/><div className="invite-time-options"><h3>And the perfect time?</h3><p>All times in {config.timezone.replaceAll("_", " ")}.</p>{config.timeSlots.map((slot, index) => { const Icon = index === 0 ? Sun : index === 1 ? Sparkles : Moon; const passed = chosenDate === zonedToday(config.timezone) && slot.time <= new Intl.DateTimeFormat("en-GB", { timeZone: config.timezone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date()); return <button key={slot.id} type="button" disabled={passed} aria-label={passed ? `${slot.label}, already passed today` : undefined} className={`invite-time-option ${timeSlotId === slot.id ? "invite-selected" : ""}`} aria-pressed={timeSlotId === slot.id} onClick={() => { setTimeSlotId(slot.id); setError(""); }}><span className="invite-option-icon"><Icon size={20}/></span><span><strong>{slot.label}</strong><small>{slot.time}{passed ? " · passed today" : ""}</small></span><span className="invite-select-circle">{timeSlotId === slot.id && <Check size={12}/>}</span></button>; })}<div className="invite-date-note"><Heart size={15}/><span>{chosenDate ? dateLabel(chosenDate) : "A day with you is always a good day."}</span></div></div></div><div className="invite-action-row"><span>Something to circle on our calendar ♡</span><button className="invite-button invite-primary" onClick={nextFromDate}>The little things <ArrowRight size={17}/></button></div></>}
           {step === "preferences" && <><div className="invite-step-heading"><span className="invite-section-icon"><Sparkles size={21}/></span><span className="invite-eyebrow">THE PLAN IS BETTER WITH YOU IN IT</span><h1 ref={headingRef} tabIndex={-1}>Your kind of lovely.</h1><p>Big plans or little moments. Let’s make this feel like us.</p></div>{questions.map((question) => <fieldset key={question.id} className="invite-question-group"><legend>{question.label}<span>{question.required ? "Required" : "Optional"}</span></legend>{question.description && <p>{question.description}</p>}<div className="invite-choice-grid" role={question.selectionMode === "single" ? "radiogroup" : "group"} aria-label={question.label}>{question.options.map((option) => { const selected = (selections[question.id] || []).includes(option.id); return <button key={option.id} type="button" role={question.selectionMode === "single" ? "radio" : "checkbox"} aria-checked={selected} className={`invite-choice ${selected ? "invite-selected" : ""}`} onKeyDown={(event) => { if (question.selectionMode === "single" && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) { event.preventDefault(); const options = Array.from(event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>("[role=radio]") || []); const index = options.indexOf(event.currentTarget); const next = options[(index + (event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1) + options.length) % options.length]; next?.focus(); next?.click(); } }} onClick={() => selectOption(question.id, option.id, question.selectionMode, question.maxSelections)}><span className="invite-choice-emoji" aria-hidden="true">{option.emoji}</span><span className="invite-select-circle">{selected && <Check size={12}/>}</span><strong>{option.label}</strong>{option.description && <small>{option.description}</small>}</button>; })}</div>{!question.required && (selections[question.id] || []).length > 0 && <button type="button" className="invite-clear-selection" onClick={() => { setSelections((previous) => ({ ...previous, [question.id]: [] })); setError(""); }}>Clear my choice</button>}<p className="invite-selection-guidance">{question.selectionMode === "single" ? "Choose one favourite." : `Choose ${question.minSelections || (question.required ? 1 : 0)}–${question.maxSelections} favourites.`}</p></fieldset>)}<div className="invite-action-row"><span>The company is already my favourite part.</span><button className="invite-button invite-primary" onClick={nextFromPreferences}>Add a little note <ArrowRight size={17}/></button></div></>}
           {step === "note" && <><div className="invite-step-heading"><span className="invite-section-icon"><Mail size={21}/></span><span className="invite-eyebrow">A FEW WORDS, IF YOU LIKE</span><h1 ref={headingRef} tabIndex={-1}>{answer === "yes" ? "A little note for me?" : "Another day is lovely, too."}</h1><p>{answer === "yes" ? "A wish, a hint, or simply a hello. I’ll love reading it." : "Take your time, my love. You can leave a note, or simply send your answer."}</p></div><div className="invite-message-paper"><label htmlFor="invite-message">Dear {config.senderName}, <span>(optional)</span></label><textarea id="invite-message" disabled={messageMaxLength === 0} value={message} maxLength={messageMaxLength} onChange={(event) => setMessage(event.target.value)} placeholder={answer === "yes" ? "I’m looking forward to…" : "Maybe we could…"} rows={6}/><div className="invite-message-footer"><span>With love, {config.recipientName}</span><small>{message.length} / {messageMaxLength}</small></div></div><div className="invite-action-row"><span>You can leave this page blank.</span><button className="invite-button invite-primary" onClick={() => go("review")}>Review my reply <ArrowRight size={17}/></button></div></>}
-          {step === "review" && <><div className="invite-step-heading"><span className="invite-section-icon"><Heart size={21}/></span><span className="invite-eyebrow">ONE LAST LITTLE LOOK</span><h1 ref={headingRef} tabIndex={-1}>{answer === "yes" ? "Our date, our way." : "A little rain check."}</h1><p>{answer === "yes" ? "Here’s what we have to look forward to." : "Your answer is yours to choose. Let’s send it with love."}</p></div><div className="invite-review"><div className="invite-review-line"><span><Heart size={17}/>Your answer</span><strong>{answer === "yes" ? "Yes, let’s make a memory." : "No, maybe another time."}</strong><button onClick={() => go("welcome")} aria-label="Edit your answer">Edit</button></div>{answer === "yes" && <><div className="invite-review-line"><span><CalendarDays size={17}/>Our day</span><strong>{dateLabel(chosenDate)}</strong><button onClick={() => go("date")} aria-label="Edit invitation date">Edit</button></div><div className="invite-review-line"><span><Clock3 size={17}/>Our time</span><strong>{chosenTime ? `${chosenTime.time} · ${chosenTime.label}` : "Choose a time"}<small>{config.timezone}</small></strong><button onClick={() => go("date")} aria-label="Edit invitation time">Edit</button></div></>}{questions.map((question) => <div className="invite-review-line" key={question.id}><span><Sparkles size={17}/>{question.label}</span><strong>{question.options.filter((option) => (selections[question.id] || []).includes(option.id)).map((option) => option.label).join(", ") || "No preference"}</strong><button onClick={() => go("preferences")} aria-label={`Edit ${question.label}`}>Edit</button></div>)}<div className="invite-review-line invite-review-note"><span><Mail size={17}/>Your little note</span><strong>{message || "Just love. No extra words."}</strong><button onClick={() => go("note")} aria-label="Edit optional note">Edit</button></div></div>{!canSave && <div className="invite-unsaved-note"><Mail size={18}/><p>{payload.configured ? "Open the personal link Fahim shared with you to send this reply." : "You’re exploring the design. Connect Supabase and open a personal invitation link to save a real reply."}</p></div>}<div className="invite-submit-row"><button className="invite-button invite-primary" disabled={!canSave || saving} onClick={submit}>{saving ? "Sending your little reply…" : answer === "yes" ? "Send my yes, with love" : "Send my answer"}<Heart size={17}/></button><p>{demo ? "Saved only in this browser. It won’t be sent automatically." : canSave ? "Your reply is private, just between the two of you." : "Preview only · this reply has not been saved."}</p></div></>}
+          {step === "review" && <><div className="invite-step-heading"><span className="invite-section-icon"><Heart size={21}/></span><span className="invite-eyebrow">ONE LAST LITTLE LOOK</span><h1 ref={headingRef} tabIndex={-1}>{answer === "yes" ? "Our date, our way." : "A little rain check."}</h1><p>{answer === "yes" ? "Here’s what we have to look forward to." : "Your answer is yours to choose. Let’s send it with love."}</p></div><div className="invite-review"><div className="invite-review-line"><span><Heart size={17}/>Your answer</span><strong>{answer === "yes" ? "Yes, let’s make a memory." : "No, maybe another time."}</strong><button onClick={() => go("welcome")} aria-label="Edit your answer">Edit</button></div>{answer === "yes" && <><div className="invite-review-line"><span><CalendarDays size={17}/>Our day</span><strong>{dateLabel(chosenDate)}</strong><button onClick={() => go("date")} aria-label="Edit invitation date">Edit</button></div><div className="invite-review-line"><span><Clock3 size={17}/>Our time</span><strong>{chosenTime ? `${chosenTime.time} · ${chosenTime.label}` : "Choose a time"}<small>{config.timezone}</small></strong><button onClick={() => go("date")} aria-label="Edit invitation time">Edit</button></div></>}{questions.map((question) => <div className="invite-review-line" key={question.id}><span><Sparkles size={17}/>{question.label}</span><strong>{question.options.filter((option) => (selections[question.id] || []).includes(option.id)).map((option) => option.label).join(", ") || "No preference"}</strong><button onClick={() => go("preferences")} aria-label={`Edit ${question.label}`}>Edit</button></div>)}<div className="invite-review-line invite-review-note"><span><Mail size={17}/>Your little note</span><strong>{message || "Just love. No extra words."}</strong><button onClick={() => go("note")} aria-label="Edit optional note">Edit</button></div></div>{!canSave && <div className="invite-unsaved-note"><Mail size={18}/><p>{preview ? "This is a design preview. Your existing reply is preserved; open the invitation normally to send a reply." : payload.configured ? "Open the personal link Fahim shared with you to send this reply." : "You’re exploring the design. Connect Supabase and open a personal invitation link to save a real reply."}</p></div>}<div className="invite-submit-row"><button className="invite-button invite-primary" disabled={!canSave || saving} onClick={submit}>{saving ? "Sending your little reply…" : answer === "yes" ? "Send my yes, with love" : "Send my answer"}<Heart size={17}/></button><p>{preview ? "Preview only · no reply will be saved." : demo ? "Saved only in this browser. It won’t be sent automatically." : canSave ? "Your reply is private, just between the two of you." : "Preview only · this reply has not been saved."}</p></div></>}
           {error && <div className="invite-error" role="alert"><span>{error}</span></div>}
         </div>
       </section>}

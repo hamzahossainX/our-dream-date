@@ -8,7 +8,7 @@ Recommended repository name: `our-dream-date`. Keep it private while configuring
 
 Create the GitHub repository, push the reviewed source, and import it into Vercel with the Next.js preset and repository root. Use `npm ci` and `npm run build`. No database environment variables are required. Share the deployed `/demo` invitation or `/admin/demo` dashboard sample.
 
-The recipient demo saves the final reply in that browser's local storage. It survives a reload on the same browser, but does not deliver a reply to Fahim or synchronize with the admin demo. Clearing browser storage removes it. Admin demo sample replies have been removed; the dashboard starts empty on every visit. Its setting edits reset on reload. This mode is appropriate for showing the gift or using it together on one device.
+The recipient demo saves the final reply in that browser's local storage. It survives a reload on the same browser, but does not deliver a reply to Fahim or synchronize with the admin demo. Clearing browser storage removes it. Admin demo sample replies have been removed; the dashboard starts empty on every visit. Settings save in browser local storage and survive reload. Personalized links include a snapshot of the saved design for another device; replies stay with the recipient. This mode is appropriate for showing the gift or using it together on one device.
 
 You still need GitHub and Vercel account authorization to publish. No Supabase account, database password, API key, or real admin credentials are needed for demo-only use. The app remains a Next.js deployment with server routes in its source; this handover does not include a separate static-export build.
 
@@ -52,7 +52,7 @@ Configure these through the owner's provider accounts when enabling real shared 
 
 Supabase recommends publishable and secret keys for new projects. The current server environment name `SUPABASE_SERVICE_ROLE_KEY` can contain the project's server secret key; it must remain server-only. Legacy local `anon`/`service_role` keys are also supported by this app. Elevated keys bypass RLS, so server authorization remains necessary. [Supabase API keys](https://supabase.com/docs/guides/getting-started/api-keys).
 
-The public demo credentials are display samples. They route to `/admin/demo` and do not identify a real Supabase account. The demo starts with no responses. Setting edits stay in component memory and reset on reload; exports and creating real private links require real admin access.
+The public demo credentials are display samples. They route to `/admin/demo` and do not identify a real Supabase account. The demo starts with no responses. Setting edits persist in browser local storage after saving. View saved invitation opens a preview without changing a completed reply. Personalized links carry the saved configuration in the URL fragment; treat their wording as visible to anyone receiving the link. Further edits need a newly generated link. Exports and creating server-backed private links require real admin access.
 
 ## 1. Prepare the source
 
